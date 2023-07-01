@@ -24,7 +24,7 @@ Run the script:
 
 # Support
 
-As mentioned you'll need an HID keyboard/emulator, a tiny piece of hardware for this to work optimally. They can be had for a only a few bucks from a few different vendors. That and PySerial along with a Python installed is all.
+As mentioned you'll need an HID keyboard/emulator, a tiny piece of hardware for this to work optimally. They can be had for a only a few bucks from a few different vendors. That and PySerial along with Python installed is all.
 
 *You can see what the keyboard/emulator looks like by visiting here: https://tinyurl.com/5xe4n4mn*
 
