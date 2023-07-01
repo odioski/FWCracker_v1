@@ -92,8 +92,8 @@ def FWCracker(counter, attempts):
         print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))      ###########      So if you suspect the number is 4195, maybe, then count 
         do_writer_do(passcode, ser, clear)                                                              #            to 5000. If you think it's 332 then count to 400 or
         n += 1                                                                                          #            maybe 350, etc... This is why adding some radomization 
-        #                                                                                               #            could speed things up. Once user input is added, we can
-    n = 1                                                  ###############################################           replace these loops for ones which are more tailored
+        #################################################################################################            could speed things up. Once user input is added, we can
+    n = 1                                                                                               #           replace these loops for ones which are more tailored
     int(counter)                                                                                        #            and can then condense some things.
     int(attempts)
     #   Oddly enough, the variables need to be converted back to integers every iteration. 
