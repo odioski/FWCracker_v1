@@ -11,15 +11,15 @@ FWCracker 2 is a tad more developed since it asks you for these variables withou
 
 Download/clone FWCracker_v1
 
-  git clone https://github.com/odioski/FWCracker_v1.git
+    git clone https://github.com/odioski/FWCracker_v1.git
 
 Install PySerial with pip
 
-  pip install pyserial
+    pip install pyserial
 
 Run the script:
 
-  python -m FWCracker.py
+    python -m FWCracker.py
 
 # Support
 
