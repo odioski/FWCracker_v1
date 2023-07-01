@@ -81,7 +81,7 @@ def status(attempts):
 #   A bit of joke, since this will take a while, it's ok to get a little comfortable.
 
 
-def pass_guesser(counter, attempts):
+def FWCracker(counter, attempts):
     #   The attempts.
     n = 0
     while n <= 9999:                         ##############################################################
@@ -230,5 +230,5 @@ time.sleep(1)
 ser.baudrate = 9600
 # PySerial as well, neccesary protocols for this app and your device.
 
-pass_guesser(counter, attempts)
+FWCracker(counter, attempts)
 
