@@ -25,6 +25,6 @@ Run the script:
 
 As mentioned you'll need an HID keyboard/emulator, a tiny piece of hardware for this to work optimally. They can be had for a only a few bucks from a few different vendors. That and PySerial along with a Python interpreter is all.
 
-*You can see what it looks like by visiting here: https://tinyurl.com/5xe4n4mn*
+*You can see what the keyboard/emulator looks like by visiting here: https://tinyurl.com/5xe4n4mn*
 
 As a precaution, you should run FWCracker from the safety of your venv. You should also navigate to that directory before you install PySerial. If FWCracker has trouble running *pyserial-ports*, then you'll need to add it to your *PATH*
