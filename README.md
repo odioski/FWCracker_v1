@@ -1,2 +1,30 @@
 # FWCracker_v1
 Firmware Bypass CLI Utility
+
+This was the original script for FWCracker which isn't very developed but works all the same. What you'll need to do is change the constants in the script to the words and phrases you may use when you set the password.
+The idea was to help with simple passwords, abc123 like patterns where the user has simply forgotten the number part of the sequence which is sometimes a average occurence. In that case you can guess what number you
+would have used, and the word/phrase part of the sequence to hopefully regain access to your system without having to wipe any data.
+
+FWCracker 2 is a tad more developed since it asks you for these variables without you having to modify the script. FWCracker 3 will have a nice GUI wrapped around the utility to make things even smoother.
+
+# Installation
+
+Download/clone FWCracker_v1
+
+  git clone https://github.com/odioski/FWCracker_v1.git
+
+Install PySerial with pip
+
+  pip install pyserial
+
+Run the script:
+
+  python -m FWCracker.py
+
+# Support
+
+As mentioned you'll need an HID keyboard/emulator, a tiny piece of hardware for this to work optimally. They can be had for a only a few bucks from a few different vendors. That and PySerial along with a Python interpreter is all.
+
+*You can see what it looks like by visiting here: https://tinyurl.com/5xe4n4mn*
+
+As a precaution, you should run FWCracker from the safety of your venv. You should also navigate to that directory before you install PySerial. If FWCracker has trouble running *pyserial-ports*, then you'll need to add it to your *PATH*
