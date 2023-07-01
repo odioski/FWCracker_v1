@@ -211,7 +211,7 @@ def FWCracker(counter, attempts):
 
 def do_writer_do(passcode, ser, clear):
     #   The writer...
-    print(ser.name + " " + str(passcode) + " " + str(clear))
+    print(str(passcode) + " " + str(clear))
     to_bytes = passcode.encode(encoding='ascii')
     #   Your emulator will most likely convert 'ascii' to the corresponding keycodes.
     ser.write(to_bytes)
