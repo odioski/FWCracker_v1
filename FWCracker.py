@@ -212,16 +212,7 @@ def do_writer_do(passcode, ser, clear):
     ser.write(to_bytes)
     print("\n")
     time.sleep(13)
-#
-#   This is PySerial from serial and is how this app sends/writes to the emulator. Visit this site to learn more: https://pyserial.readthedocs.io/en/latest/index.html
-#   I haven't found out what's up with this yet. No where near that amount of time is needed on other systems. Just the mac.
-#   Still searching for a concise source on the innerworkings of keyboards. I suspect there's a control byte sent or recieved which can help things along.
-#   Until google finds it, this will suffice. 
-#   
-#   It's dangerous to try and read with this device since you could permanently lock the port if things don't sync correctly.
-#   Thus damaging or destroying the device. So, some knowledge of keyboard communications is neccessary before moving forward.
-#
-#   I've only encountered this issue with the mac. Other systems respond normally and only a second or two is neccessary between transmissions.
+
 
 subprocess.run(code)
 #   This is as dangerous as it's known to be, however this tool is meant for offline use.
@@ -241,21 +232,3 @@ ser.baudrate = 9600
 
 pass_guesser(counter, attempts)
 
-
-#   Anyway, here you go...
- """
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
- """
