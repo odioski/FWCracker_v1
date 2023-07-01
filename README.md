@@ -28,4 +28,4 @@ As mentioned you'll need an HID keyboard/emulator, a tiny piece of hardware for 
 
 *You can see what the keyboard/emulator looks like by visiting here: https://tinyurl.com/5xe4n4mn*
 
-As a precaution, you should run FWCracker from the safety of your venv. You should also navigate to that directory before you install PySerial. If FWCracker has trouble running *pyserial-ports*, then you'll need to add it to your *PATH*
+As a precaution, you should run FWCracker from the safety of your venv. You should also launch your venv before you install PySerial. If FWCracker has trouble running *pyserial-ports*, then you'll need to add it to your *PATH*

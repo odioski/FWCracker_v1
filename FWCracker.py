@@ -38,10 +38,15 @@
 
 
 import time
+
 #   although we really love Mac's they can be a little janky...need to slow down the transmissions to some degree.
+
 import subprocess
+
 #   this is to run a line of code which might aide the eu.
+
 import serial
+
 #   and this piece is the real magic behind the script.
 
 
