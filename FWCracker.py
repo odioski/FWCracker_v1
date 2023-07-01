@@ -211,7 +211,7 @@ def do_writer_do(passcode, ser, clear):
     #   Your emulator will most likely convert 'ascii' to the corresponding keycodes.
     ser.write(to_bytes)
     print("\n")
-    time.sleep(13)
+    time.sleep(3)
 
 
 subprocess.run(code)
