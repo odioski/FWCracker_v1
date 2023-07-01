@@ -93,7 +93,7 @@ def FWCracker(counter, attempts):
         do_writer_do(passcode, ser, clear)                                                              #            to 5000. If you think it's 332 then count to 400 or
         n += 1                                                                                          #            maybe 350, etc... This is why adding some radomization 
         #################################################################################################            could speed things up. Once user input is added, we can
-    n = 1                                                                                               #           replace these loops for ones which are more tailored
+    n = 1                                                                                               #            replace these loops for ones which are more tailored
     int(counter)                                                                                        #            and can then condense some things.
     int(attempts)
     #   Oddly enough, the variables need to be converted back to integers every iteration. 
