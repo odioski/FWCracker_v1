@@ -1,10 +1,10 @@
 # FWCracker_v1
 Firmware Bypass CLI Utility
 
-This is the original script for FWCracker which isn't very developed but works all the same. What you'll need to do is change the constants in the script to the words and phrases you may use when you set the password.
+This is the original script for FWCracker which isn't very developed but works all the same. What you'll need to do is change the constants in the script to the words or phrases you may use when you set the password.
 The idea was to help with simple passwords, abc123 like patterns where the user has simply forgotten the number part of the sequence which is sometimes a average occurence. In that case you can guess what number you
 would have used, and the word/phrase part of the sequence to hopefully regain access to your system without having to wipe any data. What the app will do is iterate the numbered part of the password until it guesses the 
-right password.
+right combination.
 
 FWCracker 2 is a tad more developed since it asks you for these variables without you having to modify the script. FWCracker 3 will have a nice GUI wrapped around the utility to make things even smoother.
 
