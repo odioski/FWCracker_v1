@@ -87,7 +87,7 @@ def pass_guesser(counter, attempts):
     while n <= 9999:                         ##############################################################
         #   Trying for Xbox...                                                                          #            This loop can be and is iterated for each suspected
         counter += 1    #   Titan                                                                       #            word pattern. As far as the part of the combo which
-        WordPattrn = WORD_1                                                                              #            includes numbers, use 'the imagined largest factor 
+        WordPattrn = WORD_1                                                                             #            includes numbers, use 'the imagined largest factor 
         passcode = WordPattrn + str(n) + "\r"                                                     ###############    of those combined digits real number'~Boris
         print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))      ###########      So if you suspect the number is 4195, maybe, then count 
         do_writer_do(passcode, ser, clear)                                                              #            to 5000. If you think it's 332 then count to 400 or
