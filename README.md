@@ -22,7 +22,7 @@ Install PySerial with pip
 
 Run the script:
 
-    python -m FWCracker.py
+    python FWCracker.py
 
 # Support
 
