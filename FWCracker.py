@@ -22,7 +22,7 @@
 ##   firmware lock you're trying to bypass or a boot-up lock. Against an OS, I imagine you'll only have success with the most ancient of systems.
 ##
 ##   And, if you haven't realized, hints or some idea of what the password is, is actually neccessary for this to work. This is why future versions will
-##   queery for hints, in order to help the app guess the right combination. Therefore, this application wouldn't be of much use to the Black Hat market, but owners 
+##   query for hints, in order to help the app guess the right combination. Therefore, this application wouldn't be of much use to the Black Hat market, but owners 
 ##   of the gear, and some repair personnel could gain some use from it. Some Black Hat's could possibly use this, but those are the truly embedded (practiced) ones.
 ##
 ##   Lastly, Brute-force makes an attempt for every possible combination of characters used in the suspected password. It takes more or less the same amount of code to write such, 
@@ -222,7 +222,7 @@ def do_writer_do(passcode, ser, clear):
 subprocess.run(code)
 #   This is as dangerous as it's known to be, however this tool is meant for offline use.
 #   Plus, in this scenario there's no advanced system or OS present, only the BIOS and CMOS are encountered.
-#   Not sure how one would exploit it from this vantage point, or why, or if one could possibly profit.
+#   Not sure how one would exploit the cmos from this vantage point, or why, or if one could possibly profit.
 
 
 hid_port = input("Enter your emulator's serial port: ")
