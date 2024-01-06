@@ -6,7 +6,7 @@ The idea was to help with simple passwords, abc123 like patterns where the user 
 would have used, and the word/phrase part of the sequence to hopefully regain access to your system without having to wipe any data. What the app will do is iterate the numbered part of the password until it guesses the 
 right combination, given the phrase part of the sequence is correct. 
 
-Although this can appear as kind of a half-measure, those who use these patterns of aware of how easy it is to forget the numbered portion and not the phrase, so, for those users this will likely help.
+Although this can appear as kind of a half-measure, those who use these patterns are aware of how easy it is to forget the numbered portion and not the phrase, so, for those users this will likely help.
 
 FWCracker 2 is a tad more practical since it asks you for these variables without you having to modify the script. FWCracker 3 will have a nice GUI wrapped around the utility to make things even smoother.
 
