@@ -87,7 +87,6 @@ def status(attempts):
 
 
 def FWCracker(counter, attempts):
-    #   The attempts.
     n = 0
     while n <= 9999:                         ##############################################################
         #   Trying for Xbox...                                                                          #            This loop can be and is iterated for each suspected
