@@ -1,238 +1,305 @@
+#   FWCracker_v3...
 
-###################################################################################################################################################################################
-##
-##  THE ORIGINAL FWCracker.............
-##
-###################################################################################################################################################################################
-##   This script will attempt to guess at your password using most laymens favorited of password paradignms, ie., abc123. It's handy if you often use such passwords 
-##   with firmware locks on your devices. Most have long since stoped using these particular patterns but if you change the constants to suite your needs, 
-##   it should work just fine.
-##
-##   There are three things you'll need other than what you probably already have those being a Python interpreter and an IDE:
-##
-##   -- A HID recognizable Keyboard/emulator, preferably one which can send and recieve RS-232. These can be found easily online, but so far I've only found retailers overseas.
-##   -- A USB to TTL cable to talk to the emulator. These are more easily found here.
-##   -- A module called PySerial which can be had from PyPi.org via pip
-##
-##   I've considered expanding it to include user input (hints) and possibly some randomization with the hopes of making it faster.
-##   That's why it's there on Github.
-##  
-##   I'm sure you realize that most modern hardware has some kind of lockout enabled after mutltiple failed attempts. For some instances this will still work fine,
-##   mostly for older hardware and of course some of the relics are more than accessible. If the password is simple and if it is indeed a 
-##   firmware lock you're trying to bypass or a boot-up lock. Against an OS, I imagine you'll only have success with the most ancient of systems.
-##
-##   And, if you haven't realized, hints or some idea of what the password is, is actually neccessary for this to work. This is why future versions will
-##   query for hints, in order to help the app guess the right combination. Therefore, this application wouldn't be of much use to the Black Hat market, but owners 
-##   of the gear, and some repair personnel could gain some use from it. Some Black Hat's could possibly use this, but those are the truly embedded (practiced) ones.
-##
-##   Lastly, Brute-force makes an attempt for every possible combination of characters used in the suspected password. It takes more or less the same amount of code to write such, 
-##   however more complex, but due to the speed of CMOS or BIOS in general, it would take infinitly longer to complete. For the most part they're fire and forget 
-##   but they're also notoriously slow. This approach requires a little detective work before deploying, so, with a lttle info and a ton of luck results can 
-##   possibly be gained faster. 
-##
-##   I think you can see the idea clearly now and what my hopes are for this app. I'll continue to develop it, and branch off to create something more user friendly. 
-##   I haven't gotten into gui development yet but if I find a good source on the subject I'll gladly add that in.
-##
-#################################################################################################################################################################################
-#
-
-
-import time
-
-#   although we really love Mac's they can be a little janky...need to slow down the transmissions to some degree.
-
+import os
 import subprocess
-
-#   this is to run a line of code which might aide the eu.
-
+import sys
+import time
 import serial
 
-#   and this piece is the real magic behind the script.
+basedir = os.path.dirname(__file__)
 
 
-WORD_1 = "Xbox"
-WORD_2 = "xbox"
-WORD_3 = "XBOX"
-WORD_4 = "xBOX"
-#
-#   These were my favorite words for simple passwords like firmware passwords. As you can see, bruteforce is hard to do.
-#   I don't use any of these with my devices anymore so don't feel suspect for reading this...
-#   You can and should change the constants to your own word patterns or add more or less if needed.
-#
-WORD_5 = "App"
-WORD_6 = "app"
-WORD_7 = "APP"
-WORD_8 = "aPP"
-#
-#
-#
+#   Necessary components...
 
 
-code = "pyserial-ports -v"
-#   The little helper I mentioned earlier...
+from pathlib import Path
 
-global counter
-global attempts
+from PyQt6.QtCore import QObject, QRunnable, QSize, Qt, QThreadPool
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtWidgets import (QApplication, QCheckBox, QLabel, QLineEdit,
+                             QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QWidget)
 
-counter = 0
-attempts = 0
+global newData
+global some_word
+global global_number_pattern
+global hid_port
+global control
 
-#   Counters,
+some_word               = "NIL"
+global_number_pattern   = "NIL"
+hid_port                = "NIL"
+control                 = "UNSET" 
+
+#   From here we'll attempt to integrate a workable GUI for this app
+
+app = QApplication([])
+
+class MainWindow(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+    
+        logo = QLabel("FWCracker")
+        logo.setPixmap(QPixmap(os.path.join(basedir, "logo.png")))
+        logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        PhraseLabel = QLabel("Word/Phrase")
+        NumberLabel = QLabel("Number")
+        SerialLabel = QLabel("Serial Port")
+
+        word = QLineEdit()
+        pattern = QLineEdit()
+        port = QLineEdit()
+
+      
+        word.setPlaceholderText("Enter the word or phrase here...")
+        word.textChanged.connect(self.decouple_word)
+
+        pattern.setPlaceholderText("Enter the number portion here...")
+        pattern.textChanged.connect(self.decouple_pattern)
+
+        port.setPlaceholderText("Enter your serial port here. Should be something like COM# or /dev/tty/USB###...")
+        port.textChanged.connect(self.decouple_port)
+        
+        control = QCheckBox("Bios needs confirmation?")
+        control.stateChanged.connect(self.decouple_control)
+
+        launchButton = QPushButton("Launch")
+        launchButton.setFixedHeight(30)
+        launchButton.clicked.connect(self.starter)
+
+        global pauseButton
+
+        pauseButton = QPushButton()
+        pauseButton.setIcon(QIcon(os.path.join(basedir, "pauseBtn.png")))
+        pauseButton.setFixedSize(30, 30)
+
+        global Output
+
+        Output = QLabel("Output will be displayed here...")
+        Output.setObjectName("nfo")
+        Output.setFixedHeight(250)
+        Output.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        Output.setWordWrap(True)
+              
+        findPorts = QPushButton("List Ports")
+        findPorts.clicked.connect(find_ports)
+
+        layout = QVBoxLayout()
+        app_controls = QHBoxLayout()
+
+        layout.addWidget(logo)
+        layout.addWidget(PhraseLabel)
+        layout.addWidget(word)
+        layout.addWidget(NumberLabel)
+        layout.addWidget(pattern)
+        layout.addWidget(control)
+        layout.addWidget(findPorts)
+        layout.addWidget(SerialLabel)
+        layout.addWidget(port)
+
+        layout.addLayout(app_controls)
+
+        app_controls.addWidget(launchButton)
+        app_controls.addWidget(pauseButton)
+
+        layout.addWidget(Output)
+
+        app_container = QWidget()
+        app_container.setLayout(layout)
 
 
+#   self.setFixedSize(QSize(###, 400))
 
-def status(attempts):
-    print("\n So far, you've made " + str(attempts) + " attempts to penetrate this machine...and counting.\n")
-#   A bit of joke, since this will take a while, it's ok to get a little comfortable.
+        self.setCentralWidget(app_container)
 
 
-def FWCracker(counter, attempts):
-    n = 0
-    while n <= 9999:                         ##############################################################
-        #   Trying for Xbox...                                                                          #            This loop can be and is iterated for each suspected
-        counter += 1    #   Titan                                                                       #            word pattern. As far as the part of the combo which
-        WordPattrn = WORD_1                                                                             #            includes numbers, use 'the imagined largest factor 
-        passcode = WordPattrn + str(n) + "\r"                                                     ###############    of those combined digits real number'~Boris
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))      ###########      So if you suspect the number is 4195, maybe, then count 
-        do_writer_do(passcode, ser, clear)                                                              #            to 5000. If you think it's 332 then count to 400 or
-        n += 1                                                                                          #            maybe 350, etc... This is why adding some radomization 
-        #################################################################################################            could speed things up. Once user input is added, we can
-    n = 1                                                                                               #            replace these loops for ones which are more tailored
-    int(counter)                                                                                        #            and can then condense some things.
-    int(attempts)
-    #   Oddly enough, the variables need to be converted back to integers every iteration. 
-    #   I may be missing something but I thought a variable's type was determined by it's usage or how it's referenced, here in python.
-    attempts += counter
-    #   You have to keep a record outside of the loop to count precisely. This precept escaped me for many years.
-    #   If you think about it, you can't add or take from a loop, something that's already cycling without stopping the cycle or waiting for it to end, right?
-    status(attempts)
-    counter = 0
-    while n <= 9999:
-        #   Trying for xbox
-        WordPattrn = WORD_2
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
-        n += 1
-        counter += 1
+#   That's it, thanks to py(Qt)
+
+
+#   Some helpers...
+
+    def decouple_word(self, text):
+        global some_word
+        some_word = text
+        Output.setText("Word portion is set to: " + some_word)
+        if text == "":
+            Output.setText("Output will be displayed here...")
+    
+
+    def decouple_pattern(self, text):
+        global global_number_pattern
+        if text.isdecimal() == False:
+            newData = "Need a number here..."
+            Output.setText(newData)
+        else:
+            global_number_pattern = text
+            Output.setText("Number poriton is set to: " + global_number_pattern)
+        if text == "":
+            Output.setText("Output will be displayed here...")
+    
+
+    def decouple_control(self, state):
+        if state > 0:
+            control = "SET"
+            newData = "Bios Confirmation: " + control
+            Output.setText(newData)
+        else:
+            control = "UNSET"
+            newData = "Bios Confirmation: " + control
+            Output.setText(newData)
+            
+
+    def decouple_port(self, text):
+        global hid_port
+        hid_port = text
+        newData = "Your serial port is set: " + text
+        Output.setText(newData)
+
+
+    def starter(self):
+        if hid_port != "NIL" and some_word != "NIL" and global_number_pattern != "NIL":
+            QThreadPool.globalInstance().start(self.build_range)
+        else:
+            Output.setText("Please fill out the form...")
+
+
+#   FWCracker, modified
+
+    def build_range(self):
+        newData = "\nWelcome " + os.name + " user..."
+        Output.setText(newData)
+        time.sleep(3)
+        known_factor = int(global_number_pattern) / 10
+        
+        if known_factor <= 1:
+            o_range = 10
+            newData = "\n10 different possibilities based on this info...\n"
+            Output.setText(newData)
+            
+        else:
+            if known_factor <= 10:
+                o_range = 100
+                newData = "\n100 different possiblities based on this info...\n"
+                Output.setText(newData)
+                
+            else:
+                if known_factor <= 100:
+                    o_range = 1000
+                    newData = "\n1,000 different possiblities based on this info...\n"
+                    Output.setText(newData)
+                    
+                else:
+                    if known_factor <= 1000:
+                        o_range = 10000
+                        newData = "\n10,000 different possiblities based on this info...\n"
+                        Output.setText(newData)
+                        
+                    else:
+                        if known_factor <= 10000:
+                            o_range = 100000
+                            newData = "\nBased on the number you provided this will take a very long time.\n"
+                            Output.setText(newData)
+                            
+                        else:
+                            if known_factor <= 100000:
+                                o_range = 1000000
+                                newData = "\nPractically impossible, theoretically....might as well continue..."
+                                Output.setText(newData)
+                                
+                            else:
+                                if known_factor <= 1000000:
+                                    o_range = 1000000
+                                    newData = "\nOkey dokey..."
+                                    Output.setText(newData)
+        global set_range
+        set_range = o_range
+        time.sleep(3)
+        build_passcode()
+
+
+def build_passcode():
+    global n
     n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
-    while n <= 9999:
-        #   Trying for XBOX...
-        WordPattrn = WORD_3
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
+    global to_bytes
+    global passcode
+    global passcode_to_bytes
+    while n <= set_range:
+        passcode = some_word + str(n) + "\n"
+        passcode_to_bytes = passcode.encode(encoding='ascii')
+        do_writer_do()
         n += 1
-        counter += 1
-    n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
-    while n <= 9999:
-        # Trying for xBOX...
-        WordPattrn = WORD_4
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
-        n += 1
-        counter += 1
-    n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
-    while n <= 9999:
-        #   Trying for App...
-        WordPattrn = WORD_5
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
-        n += 1
-        counter += 1
-    n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
-    while n <= 9999:
-        #   Trying for app...
-        WordPattrn = WORD_6
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
-        n += 1
-        counter += 1
-    n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
-    while n <= 9999:
-        #   Trying for APP...
-        WordPattrn = WORD_7
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
-        n += 1
-        counter += 1
-    n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
-    while n <= 9999:
-        #   Trying for aPP...
-        WordPattrn = WORD_8
-        passcode = WordPattrn + str(n) + "\r"
-        print("\n This is attempt # " + str(counter) + " in this sequence..." + str(passcode))
-        do_writer_do(passcode, ser, clear)
-        n += 1
-        counter += 1
-    n = 1
-    int(counter)
-    int(attempts)
-    attempts += counter
-    counter = 0
-    status(attempts)
+
+    newData = "Later..."
+    Output.setText(newData)
+    quit()
+
+    
+def do_writer_do():  
+    time.sleep(1)
+    space = "\n\n"
+
+    ser = serial.Serial(hid_port)
+    ser.baudrate = 9600
+
+    space_to_bytes = space.encode(encoding='ascii')
+    
+    ser.write(passcode_to_bytes)
+    
+    newData = "This is attempt #" + str(n) + " of " + str(set_range) + ", using password: " + passcode
+    Output.setText(newData)
+    
+    if str(control) == 'SET':
+        ser.write(space_to_bytes)
+
+    time.sleep(2)
+
+    int(n)
+    int(set_range)
+    
+    time.sleep(1)
 
 
-
-def do_writer_do(passcode, ser, clear):
-    #   The writer...
-    print(str(passcode) + " " + str(clear))
-    to_bytes = passcode.encode(encoding='ascii')
-    #   Your emulator will most likely convert 'ascii' to the corresponding keycodes.
-    ser.write(to_bytes)
-    print("\n")
-    time.sleep(3)
+#   Workers...
 
 
-subprocess.run(code)
-#   This is as dangerous as it's known to be, however this tool is meant for offline use.
-#   Plus, in this scenario there's no advanced system or OS present, only the BIOS and CMOS are encountered.
-#   Not sure how one would exploit the cmos from this vantage point, or why, or if one could possibly profit.
+def installer():
+    check_online = 'ping yahoo.com'
+    online = subprocess.getstatusoutput(check_online)
+    status = online[0]
+    ping_output = online[1]
+    newData = ping_output
+    Output.setText(newData)
+    
+    if status == 0:
+        install = 'pip install pyserial'
+        newData = subprocess.getoutput(install)
+        Output.setText(newData)
+        time.sleep(2)
+    else:
+        newData = "FWCracker needs to be online only to get pyserial. Connect to the Internet and restart app.\n"
+        Output.setText(newData)
+        time.sleep(3)
+        quit()      
 
 
-hid_port = input("Enter your emulator's serial port: ")
-ser = serial.Serial(hid_port)
-clear = ser.is_open
-print("Your emulator's serial port is " + hid_port + " " + str(clear))
-time.sleep(1)
-#   User input, it's good when you can get it.
+def find_ports():
+    pyserial_exists = 'pyserial-ports'
+    check = subprocess.getstatusoutput(pyserial_exists)[0]
+    if check > 0:
+        installer()
+    code = 'pyserial-ports -v'
+    newData = subprocess.getoutput(code)
+    Output.setText(newData) 
 
-ser.baudrate = 9600
-# PySerial as well, neccesary protocols for this app and your device.
 
-FWCracker(counter, attempts)
+#   Launch pyQt app...
 
+window = MainWindow()
+window.show()
+
+app.setStyleSheet(Path(os.path.join(basedir, 'FWCracker.qss')).read_text())
+app.exec()
+
+
+#   FWCracker_v3...
