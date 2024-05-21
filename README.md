@@ -1,33 +1,59 @@
-# FWCracker_v1
-Firmware Bypass CLI Utility
+# FWCracker
 
-This is the original script for FWCracker which isn't very developed but works all the same. What you'll need to do is change the constants in the script to the words or phrases you might have used when you set the password.
-The idea was to help with simple passwords, abc123 like patterns where the user has simply forgotten the number part of the sequence which is sometimes a average occurence. In that case you can guess what number you
-would have used, and the word/phrase part of the sequence to hopefully regain access to your system without having to wipe any data. What the app will do is iterate the numbered part of the password until it guesses the 
-right combination, given the phrase part of the sequence is correct. 
+This script will attempt to guess at your password using most laymens favorited of password paradigms, ie., abc123. It's handy if you often use such passwords 
+with firmware locks on your devices.
 
-Although this can appear as kind of a half-measure, those who use these patterns are aware of how easy it is to forget the numbered portion and not the phrase, so, for those users this will likely help.
+*There are three things you'll need other than what you probably already have those being a Python interpreter and an IDE:*
 
-FWCracker 2 is a tad more practical since it asks you for these variables without you having to modify the script. FWCracker 3 will have a nice GUI wrapped around the utility to make things even smoother.
+	1. A HID recognizable Keyboard/emulator, preferably one which can send and recieve RS-232. These can be found easily online, but so far I've only found retailers overseas.
+	2. A USB to TTL cable to connect to the emulator. These are more easily found here.
+ 	3. A module called PySerial which can be had from PyPi.org via pip.
+	
+*You can visit the following link to see what the hid/emulator looks like:* https://tinyurl.com/5xe4n4mn
 
-# Installation
+I've considered expanding it to include user input (hints) and possibly some randomization with the hopes of making it faster.
+That's why it's there on Github.
+ 
+I'm sure you realize that most modern hardware has some kind of lockout enabled after mutltiple failed attempts. For some instances this will still work fine,
+mostly for older hardware and of course some of the relics are more than accessible. If the password is simple and if it is indeed a 
+firmware lock you're trying to bypass or a boot-up lock. Against an OS, I imagine you'll only have success with the most ancient of systems.
 
-Download/clone FWCracker_v1
+And, if you haven't realized, hints or some idea of what the password is, is actually neccessary for this to work. This is why future versions will
+query for hints, in order to help the app guess the right combination. Therefore, this application wouldn't be of much use to the Black Hat market, but owners 
+of the gear, and some repair personnel could gain some use from it. Some Black Hat's could possibly use this, but those are the truly embedded (practiced) ones.
 
-    git clone https://github.com/odioski/FWCracker_v1.git
+Lastly, Brute-force makes an attempt for every possible combination of characters used in the suspected password. It takes more or less the same amount of code to write such, 
+however more complex, but due to the speed of CMOS or BIOS in general, it would take infinitly longer to complete. For the most part they're fire and forget 
+but they're also *notoriously slow*. This approach requires a little detective work before deploying, so, with a lttle info and a ton of luck results can 
+possibly be gained faster. 
 
-Install PySerial with pip
+I think you can see the idea clearly and what my hopes are for this app. I'll continue to develop it, and branch off to create something more user friendly. 
+I haven't gotten into GUI development yet but if I find a good source on the subject I'll gladly add that in.
 
-    pip install pyserial
+# INSTALLATION
+	
+Clone from Github using git: 
+	
+	git clone https://github.com/odioski/FWCracker_v2.git
+	
+Navigate to the /src folder and use pip to get PySerial: 
+	
+	pip install pyserial
 
-Run the script:
+Launch FWCracker:
+	
+	python FWCracker.py
 
-    python FWCracker.py
+Another option, is to use the PyInstaller created executable.
 
-# Support
+Navigate to /dist folder. Inside is FWCracker.exe
 
-As mentioned you'll need an HID keyboard/emulator, a tiny piece of hardware for this to work optimally. They can be had for a only a few bucks from a few different vendors. That and PySerial along with Python installed is all.
 
-*You can see what the keyboard/emulator looks like by visiting here: https://tinyurl.com/5xe4n4mn*
+# SUPPORT
 
-As a precaution, you should run FWCracker from the safety of your venv. You should also launch your venv before you install PySerial. If FWCracker has trouble finding *pyserial-ports*, then you'll need to add it to your *PATH*
+If FWCracker can't find *pyserial-ports* you'll have to add it to your *PATH*.
+
+You can find it on linux as su:
+
+	find / -name pyserial-ports
+ 
