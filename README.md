@@ -11,28 +11,9 @@ with firmware locks on your devices.
 	
 *You can visit the following link to see what the hid/emulator looks like:* https://tinyurl.com/5xe4n4mn
 
-I've considered expanding it to include user input (hints) and possibly some randomization with the hopes of making it faster.
-That's why it's there on Github.
- 
-I'm sure you realize that most modern hardware has some kind of lockout enabled after mutltiple failed attempts. For some instances this will still work fine,
-mostly for older hardware and of course some of the relics are more than accessible. If the password is simple and if it is indeed a 
-firmware lock you're trying to bypass or a boot-up lock. Against an OS, I imagine you'll only have success with the most ancient of systems.
-
-And, if you haven't realized, hints or some idea of what the password is, is actually neccessary for this to work. This is why future versions will
-query for hints, in order to help the app guess the right combination. Therefore, this application wouldn't be of much use to the Black Hat market, but owners 
-of the gear, and some repair personnel could gain some use from it. Some Black Hat's could possibly use this, but those are the truly embedded (practiced) ones.
-
 Ok, honestly, this exploit was patched way back in 1984 around the time when the BIOS was first developed, when I was literally around 10 years old, and was when I was first introduced to all this.
 Most modern and ancient BIOS's have security features built in, like Admin passwords, or perhaps the system will kick out after a few failed attempts.
 Anyhow, if you read further you may be able to tailor the code/script so to reach your goal(s). For very old systems it's most likely a timing issue which is defeating you.
-
-Lastly, Brute-force makes an attempt for every possible combination of characters used in the suspected password. It takes more or less the same amount of code to write such, 
-however more complex, but due to the speed of CMOS or BIOS in general, it would take infinitly longer to complete. For the most part they're fire and forget 
-but they're also *notoriously slow*. This approach requires a little detective work before deploying, so, with a lttle info and a ton of luck results can 
-possibly be gained faster. 
-
-I think you can see the idea clearly and what my hopes are for this app. I'll continue to develop it, and branch off to create something more user friendly. 
-I haven't gotten into GUI development yet but if I find a good source on the subject I'll gladly add that in.
 
 # INSTALLATION
 	
