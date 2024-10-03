@@ -15,25 +15,6 @@ Ok, honestly, this exploit was patched way back in 1984 around the time when the
 Most modern and ancient BIOS's have security features built in, like Admin passwords, or perhaps the system will kick out after a few failed attempts.
 Anyhow, if you read further you may be able to tailor the code/script so to reach your goal(s). For very old systems it's most likely a timing issue which is defeating you.
 
-# INSTALLATION
-	
-Clone from Github using git: 
-	
-	git clone https://github.com/odioski/FWCracker_v2.git
-	
-Navigate to the /src folder and use pip to get PySerial: 
-	
-	pip install pyserial
-
-Launch FWCracker:
-	
-	python FWCracker.py
-
-Another option, is to use the PyInstaller created executable.
-
-Navigate to /dist folder. Inside is FWCracker.exe
-
-
 # SUPPORT
 
 If FWCracker can't find *pyserial-ports* you'll have to add it to your *PATH*.
